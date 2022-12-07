@@ -1,0 +1,15 @@
+"filename", "language", "Dart", "comment", "blank", "total"
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\api\api_service.dart", "Dart", 51, 0, 12, 63
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\auth\session.dart", "Dart", 17, 1, 4, 22
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\main.dart", "Dart", 21, 0, 3, 24
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\model\budget.dart", "Dart", 12, 0, 3, 15
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\model\user.dart", "Dart", 10, 2, 4, 16
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\global_variables.dart", "Dart", 17, 4, 6, 27
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\home_screen.dart", "Dart", 219, 4, 11, 234
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\menubar\home_menu_bar.dart", "Dart", 67, 0, 4, 71
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\login-page\login_screen.dart", "Dart", 239, 5, 16, 260
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\messeges.dart", "Dart", 12, 1, 4, 17
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\registration-page\registration_screen.dart", "Dart", 205, 0, 12, 217
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\setting-page\setting_menu.dart", "Dart", 33, 1, 3, 37
+"c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\setting-page\setting_screen.dart", "Dart", 78, 2, 4, 84
+"Total", "-", 981, 20, 86, 1087

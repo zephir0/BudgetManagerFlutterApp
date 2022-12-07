@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:budget_manager_flutter/api/api_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/home-page/menubar/home_menu_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
+import '../../model/budget.dart';
 import '../../model/user.dart';
-import 'package:animated_text_kit/animated_text_kit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -38,7 +34,6 @@ class HomeScreen extends StatelessWidget {
             builder: (BuildContext buildContext, AsyncSnapshot<User> snapshot) {
               if (snapshot.hasData) {
                 User? user = snapshot.data;
-
                 return Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Container(
@@ -73,44 +68,53 @@ class HomeScreen extends StatelessWidget {
   Padding balanceScreen(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-      child: SizedBox(
-        child: Container(
-            child: Column(children: [
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
-                child: Text(
-                  "Balance",
-                  style: TextStyle(
-                    fontSize: 35,
-                    color: Colors.white,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              )),
-              Center(
-                  child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                child: Text(
-                  "£12,500",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 43,
-                      fontWeight: FontWeight.bold),
-                ),
-              ))
-            ]),
-            height: MediaQuery.of(context).size.height * 0.2,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: <Color>[
-                      Color.fromARGB(1, 168, 218, 220),
-                      Color.fromARGB(255, 34, 23, 23)
-                    ]))),
-      ),
+      child: FutureBuilder(
+          future: ApiService().getBalance(),
+          builder: (BuildContext buildContext, AsyncSnapshot<Budget> snapshot) {
+            if (snapshot.hasData) {
+              Budget? budget = snapshot.data;
+              return SizedBox(
+                child: Container(
+                    child: Column(children: [
+                      Center(
+                          child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 10, 10),
+                        child: Text(
+                          "Balance",
+                          style: TextStyle(
+                            fontSize: 35,
+                            color: Colors.white,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      )),
+                      Center(
+                          child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        child: Text(
+                          "£" "${budget?.balance}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 43,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ))
+                    ]),
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: <Color>[
+                              Color.fromARGB(1, 168, 218, 220),
+                              Color.fromARGB(255, 34, 23, 23)
+                            ]))),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 
@@ -121,6 +125,8 @@ class HomeScreen extends StatelessWidget {
         ElevatedButton(
             onPressed: () {
               print("income");
+              ApiService().popDialogMenu(context, "income");
+              // ApiService().addIncome();
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -134,7 +140,7 @@ class HomeScreen extends StatelessWidget {
             )),
         ElevatedButton(
             onPressed: () {
-              print("expense");
+              ApiService().popDialogMenu(context, "expense");
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -161,39 +167,64 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  /// IF INCOME = 0 THEN SHOW EXPENSE , IF EXPENSE = 0 THEN SHOW INCOME.
+
   Padding mostRecentItems(BuildContext context) {
     return Padding(
       //IF BUDGET IS NEGATIVE OR IS AN EXPANSE, THEN COLOR RED, IF NOT THEN BLUE
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      child: Column(children: [
-        for (var i = 0; i < 5; i++)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-                decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 136, 29, 22),
-                    borderRadius: BorderRadius.circular(30)),
-                width: MediaQuery.of(context).size.width * 0.85,
-                height: MediaQuery.of(context).size.height * 0.1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Item $i',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Text('Item name',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white))
-                  ],
-                )),
-          ),
-      ]),
+      child: FutureBuilder(
+          future: ApiService().getIncomeOrExpense(),
+          builder: (BuildContext buildContext,
+              AsyncSnapshot<List<Budget>> snapshot) {
+            if (snapshot.hasData) {
+              List<Budget>? budget = snapshot.data;
+
+              return Column(children: [
+                for (var i in budget!.reversed)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: i.expense == 0 ? Colors.green : Colors.red,
+                            borderRadius: BorderRadius.circular(30)),
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              (() {
+                                if (i.expense == 0) {
+                                  return "Income";
+                                }
+                                return "Expense";
+                              })(),
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                            Text(
+                              (() {
+                                if (i.expense == 0) {
+                                  return "+${i?.income}";
+                                }
+                                return "-${i?.expense}";
+                              })(),
+                              style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            )
+                          ],
+                        )),
+                  )
+              ]);
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }

@@ -124,30 +124,26 @@ class HomeScreen extends StatelessWidget {
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         ElevatedButton(
             onPressed: () {
-              print("income");
-              ApiService().popDialogMenu(context, "income");
-              // ApiService().addIncome();
+              ApiService().popDialogMenu(context, "income", "INCOME");
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 backgroundColor: Color.fromARGB(255, 36, 136, 16),
                 minimumSize: GlobalVariables().loginButtonSize),
-            // ignore: prefer_const_constructors
             child: Text(
               "INCOME",
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
             )),
         ElevatedButton(
             onPressed: () {
-              ApiService().popDialogMenu(context, "expense");
+              ApiService().popDialogMenu(context, "expense", "EXPENSE");
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 backgroundColor: Color.fromARGB(255, 128, 33, 26),
                 minimumSize: GlobalVariables().loginButtonSize),
-            // ignore: prefer_const_constructors
             child: Text(
               "EXPENSE",
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
@@ -167,11 +163,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  /// IF INCOME = 0 THEN SHOW EXPENSE , IF EXPENSE = 0 THEN SHOW INCOME.
-
   Padding mostRecentItems(BuildContext context) {
     return Padding(
-      //IF BUDGET IS NEGATIVE OR IS AN EXPANSE, THEN COLOR RED, IF NOT THEN BLUE
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: FutureBuilder(
           future: ApiService().getIncomeOrExpense(),

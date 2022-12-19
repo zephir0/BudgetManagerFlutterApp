@@ -45,7 +45,6 @@ class ApiService {
   Future<List<Budget>> getIncomeOrExpense() async {
     var session = Session();
     var url = Uri.parse("http://192.168.0.14:9999/api/budget/findAll");
-
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -61,6 +60,26 @@ class ApiService {
     }
   }
 
+  Future<List<Budget>> getBudgetByDate(String dayNumber) async {
+    var session = Session();
+    var url =
+        Uri.parse("http://192.168.0.14:9999/api/budget/findAll/${dayNumber}");
+    var request = await http.get(
+      url,
+      headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
+    );
+
+    if (request.statusCode == 200) {
+      List<Budget> budgetList = (json.decode(request.body) as List)
+          .map((data) => Budget.fromJson(data))
+          .toList();
+      return budgetList;
+    } else {
+      throw Exception("Failed to get a balance.");
+    }
+  }
+
+// DO ZMIANY
   Future popDialogMenu(
       BuildContext context, String expenseOrIncome, String dialogText) async {
     GlobalKey<FormState> formkey = GlobalKey<FormState>();

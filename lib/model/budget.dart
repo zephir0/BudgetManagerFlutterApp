@@ -2,14 +2,18 @@ class Budget {
   late int? balance;
   late int? income;
   late int? expense;
-  Budget({this.balance, this.income, this.expense});
+  late String? historyDayNumber;
+  Budget({this.balance, this.income, this.expense, this.historyDayNumber});
 
   factory Budget.fromJsonBalance(int balance) {
     return Budget(balance: balance);
   }
 
   factory Budget.fromJson(Map<String, dynamic> json) {
-    return Budget(income: json['income'], expense: json['expense']);
+    return Budget(
+        income: json['income'],
+        expense: json['expense'],
+        historyDayNumber: json['historyDayNumber']);
   }
 
   Map<String, dynamic> incomeToJson() {

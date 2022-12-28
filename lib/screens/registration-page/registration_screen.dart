@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:budget_manager_flutter/api/api_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/login-page/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +194,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   Future register(User user, BuildContext context) async {
-    String url = "http://192.168.0.14:9999/auth/api/register";
+    String url = ApiService().backEndServerUrl + "/auth/api/register";
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'login': user.login, 'password': user.password}));

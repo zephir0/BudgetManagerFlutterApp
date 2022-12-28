@@ -11,9 +11,11 @@ import 'package:http/http.dart' as http;
 import '../model/budget.dart';
 
 class ApiService {
+  String backEndServerUrl = "https://serene-reaches-23699.herokuapp.com";
+
   Future<User> getUser() async {
     var session = Session();
-    var url = Uri.parse("http://192.168.0.14:9999/api/user");
+    var url = Uri.parse(backEndServerUrl + "/api/user");
 
     var request = await http.get(
       url,
@@ -28,8 +30,7 @@ class ApiService {
 
   Future<Budget> getBalance() async {
     var session = Session();
-    var url = Uri.parse("http://192.168.0.14:9999/api/budget/count/total");
-
+    var url = Uri.parse(backEndServerUrl + "/api/budget/count/total");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -44,7 +45,7 @@ class ApiService {
 
   Future<List<Budget>> getIncomeOrExpense() async {
     var session = Session();
-    var url = Uri.parse("http://192.168.0.14:9999/api/budget/findAll");
+    var url = Uri.parse(backEndServerUrl + "/api/budget/findAll");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -60,10 +61,9 @@ class ApiService {
     }
   }
 
-  Future<List<Budget>> getBudgetByDate(String dayNumber) async {
+  Future<List<Budget>> getBudgetHistoryByDate(String dayNumber) async {
     var session = Session();
-    var url =
-        Uri.parse("http://192.168.0.14:9999/api/budget/findAll/${dayNumber}");
+    var url = Uri.parse(backEndServerUrl + "/api/budget/findAll/${dayNumber}");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -84,6 +84,7 @@ class ApiService {
       BuildContext context, String expenseOrIncome, String dialogText) async {
     GlobalKey<FormState> formkey = GlobalKey<FormState>();
     TextEditingController textEditingController = TextEditingController();
+
     return await showDialog(
         context: context,
         builder: (context) {
@@ -136,7 +137,7 @@ class ApiService {
                         if (formkey.currentState!.validate()) {
                           var session = Session();
                           var url =
-                              Uri.parse("http://192.168.0.14:9999/api/budget/");
+                              Uri.parse(backEndServerUrl + "/api/budget/");
                           var body = json.encode(
                               {expenseOrIncome: textEditingController.text});
 
@@ -146,6 +147,80 @@ class ApiService {
                                 'Content-type': 'application/json'
                               },
                               body: body);
+                          setState((() {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen()),
+                              (Route<dynamic> route) => false,
+                            );
+                          }));
+                        }
+                      }),
+                      child: Text("Save"))
+                ]),
+              ),
+            );
+          });
+        });
+  }
+
+  Future popMenuAfter(
+      BuildContext context, String expenseOrIncome, Budget budget) async {
+    GlobalKey<FormState> formkey = GlobalKey<FormState>();
+    TextEditingController textEditingController = TextEditingController();
+
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return Dialog(
+              backgroundColor: Color.fromARGB(255, 31, 30, 30),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(32)),
+              child: Form(
+                key: formkey,
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "EDIT",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                  TextFormField(
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                        hintText: "...",
+                        hintStyle:
+                            TextStyle(fontSize: 15, color: Colors.white)),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "This field cannot be empty";
+                      } else
+                        return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    controller: textEditingController,
+                  ),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 53, 219, 197),
+                          minimumSize: Size.fromHeight(50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(16.0),
+                              bottomRight: Radius.circular(16.0),
+                            ),
+                          )),
+                      onPressed: (() async {
+                        if (formkey.currentState!.validate()) {
+                          editBudget(
+                              expenseOrIncome, textEditingController, budget);
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
@@ -160,5 +235,32 @@ class ApiService {
             );
           });
         });
+  }
+
+  Future editBudget(String expenseOrIncome,
+      TextEditingController textEditingController, Budget budget) async {
+    var session = Session();
+    var url = Uri.parse(backEndServerUrl + "/api/budget/${budget.id}");
+    var body = json.encode({expenseOrIncome: textEditingController.text});
+
+    await http.put(url,
+        headers: {
+          'Cookie': 'JSESSIONID=${session.cookies}',
+          'Content-type': 'application/json'
+        },
+        body: body);
+  }
+
+  Future deleteBudget(int? id) async {
+    var session = Session();
+    var url = Uri.parse(backEndServerUrl + "/api/budget/${id}");
+
+    await http.delete(
+      url,
+      headers: {
+        'Cookie': 'JSESSIONID=${session.cookies}',
+        'Content-type': 'application/json'
+      },
+    );
   }
 }

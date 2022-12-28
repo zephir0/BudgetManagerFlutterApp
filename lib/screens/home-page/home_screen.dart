@@ -3,12 +3,33 @@ import 'dart:ffi';
 import 'package:budget_manager_flutter/api/api_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/home-page/menubar/home_menu_bar.dart';
+import 'package:budget_manager_flutter/screens/home-page/slide_widget.dart';
 import 'package:flutter/material.dart';
 import '../../model/budget.dart';
 import '../../model/user.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => HomeScreenState();
+}
+
+class HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  double _dragExtent = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    animationController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -215,8 +236,8 @@ class HomeScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: FutureBuilder(
-                              future: ApiService()
-                                  .getBudgetByDate((historyDay.toString())),
+                              future: ApiService().getBudgetHistoryByDate(
+                                  (historyDay.toString())),
                               builder: (BuildContext buildContext,
                                   AsyncSnapshot<List<Budget>> snapshot) {
                                 if (snapshot.hasData) {
@@ -224,57 +245,93 @@ class HomeScreen extends StatelessWidget {
                                       snapshot.data;
 
                                   return Column(children: [
-                                    for (var budget
-                                        in historyBudgetList!.reversed)
+                                    for (var budget in historyBudgetList!
+                                        .reversed
+                                        .toList()
+                                        .sublist(
+                                            0,
+                                            budgetListElementsNumber(
+                                                historyBudgetList)))
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                color: budget.expense == 0
-                                                    ? Colors.green
-                                                    : Colors.red,
-                                                borderRadius:
-                                                    BorderRadius.circular(30)),
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.85,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.1,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                Text(
-                                                  (() {
-                                                    if (budget.expense == 0) {
-                                                      return "Income";
-                                                    }
-                                                    return "Expense";
-                                                  })(),
-                                                  style: TextStyle(
-                                                      fontSize: 22,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white),
-                                                ),
-                                                Text(
-                                                  (() {
-                                                    if (budget.expense == 0) {
-                                                      return "+${budget?.income}";
-                                                    }
-                                                    return "-${budget?.expense}";
-                                                  })(),
-                                                  style: TextStyle(
-                                                      fontSize: 22,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white),
-                                                )
-                                              ],
-                                            )),
+                                        child: InkWell(
+                                          onTap: (() {
+                                            ApiService().popMenuAfter(
+                                                context,
+                                                incomeOrExpense(budget),
+                                                budget);
+                                          }),
+                                          child: SlideBudget(
+                                            callback: () {
+                                              setState(() {
+                                                ApiService()
+                                                    .deleteBudget(budget.id);
+
+                                                Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          HomeScreen()),
+                                                  (Route<dynamic> route) =>
+                                                      false,
+                                                );
+                                              });
+                                            },
+                                            child: AnimatedContainer(
+                                                decoration: BoxDecoration(
+                                                    color: budget.expense == 0
+                                                        ? Colors.green
+                                                        : Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30)),
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.85,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.1,
+                                                duration:
+                                                    const Duration(seconds: 1),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Text(
+                                                      (() {
+                                                        if (budget.expense ==
+                                                            0) {
+                                                          return "Income";
+                                                        }
+                                                        return "Expense";
+                                                      })(),
+                                                      style: TextStyle(
+                                                          fontSize: 22,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white),
+                                                    ),
+                                                    Text(
+                                                      (() {
+                                                        if (budget.expense ==
+                                                            0) {
+                                                          return "+${budget.income}";
+                                                        }
+                                                        return "-${budget.expense}";
+                                                      })(),
+                                                      style: TextStyle(
+                                                          fontSize: 22,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: Colors.white),
+                                                    )
+                                                  ],
+                                                )),
+                                          ),
+                                        ),
                                       )
                                   ]);
                                 } else {
@@ -292,5 +349,21 @@ class HomeScreen extends StatelessWidget {
             }
           }),
     );
+  }
+
+  String incomeOrExpense(Budget budget) {
+    if (budget.income == 0) {
+      return "expense";
+    } else if (budget.expense == 0) {
+      return "income";
+    } else
+      return "EXCEPTION";
+  }
+
+  int budgetListElementsNumber(List<Budget> budgetList) {
+    if (budgetList.length >= 5) {
+      return 5;
+    } else
+      return budgetList.length;
   }
 }

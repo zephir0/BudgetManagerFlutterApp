@@ -1,13 +1,14 @@
 import 'package:http/http.dart' as http;
 
-class Session {
-  static final Session _session = Session._internal();
-  late String cookies;
-  factory Session() {
+class UserSession {
+  static final UserSession _session = UserSession._internal();
+
+  factory UserSession() {
     return _session;
   }
+  late String cookies;
 
-  Session._internal();
+  UserSession._internal();
 
   String getCookie(http.Response response) {
     String rawCookie = response.headers['set-cookie']!;
@@ -15,7 +16,11 @@ class Session {
     String refreshToken =
         (index == -1) ? rawCookie : rawCookie.substring(0, index);
     int idx = refreshToken.indexOf("=");
-    // print(refreshToken.substring(idx + 1).trim());
+
     return refreshToken.substring(idx + 1).trim();
+  }
+
+  void clearCookies() {
+    cookies = "";
   }
 }

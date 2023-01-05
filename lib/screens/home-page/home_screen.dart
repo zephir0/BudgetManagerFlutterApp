@@ -1,7 +1,8 @@
-import 'dart:ffi';
-
 import 'package:budget_manager_flutter/api/api_service.dart';
+import 'package:budget_manager_flutter/api/json_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
+import 'package:budget_manager_flutter/screens/home-page/budget_adding_menu.dart';
+import 'package:budget_manager_flutter/screens/home-page/budget_editing_menu.dart';
 import 'package:budget_manager_flutter/screens/home-page/menubar/home_menu_bar.dart';
 import 'package:budget_manager_flutter/screens/home-page/slide_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController animationController;
-  double _dragExtent = 0;
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class HomeScreenState extends State<HomeScreen>
     return Padding(
         padding: const EdgeInsets.fromLTRB(40, 10, 40, 30),
         child: FutureBuilder(
-            future: ApiService().getUser(),
+            future: JsonService().getUser(),
             builder: (BuildContext buildContext, AsyncSnapshot<User> snapshot) {
               if (snapshot.hasData) {
                 User? user = snapshot.data;
@@ -92,7 +92,7 @@ class HomeScreenState extends State<HomeScreen>
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
       child: FutureBuilder(
-          future: ApiService().getBalance(),
+          future: JsonService().getBalance(),
           builder: (BuildContext buildContext, AsyncSnapshot<Budget> snapshot) {
             if (snapshot.hasData) {
               Budget? budget = snapshot.data;
@@ -147,7 +147,7 @@ class HomeScreenState extends State<HomeScreen>
       child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         ElevatedButton(
             onPressed: () {
-              ApiService().popDialogMenu(context, "income", "INCOME");
+              BudgetAddingMenu().showDialogMenu(context, "income", "INCOME");
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -160,7 +160,7 @@ class HomeScreenState extends State<HomeScreen>
             )),
         ElevatedButton(
             onPressed: () {
-              ApiService().popDialogMenu(context, "expense", "EXPENSE");
+              BudgetAddingMenu().showDialogMenu(context, "expense", "EXPENSE");
             },
             style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -186,19 +186,12 @@ class HomeScreenState extends State<HomeScreen>
     );
   }
 
-//TO DO!!! SPLIT TO SMALLER PARTS
-//TO DO!!! SPLIT TO SMALLER PARTS
-//TO DO!!! SPLIT TO SMALLER PARTS
-//TO DO!!! SPLIT TO SMALLER PARTS
-//TO DO!!! SPLIT TO SMALLER PARTS
-//TO DO!!! SPLIT TO SMALLER PARTS
-
   Padding mostRecentItems(BuildContext context) {
     List<dynamic> historyDays = [];
     return Padding(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: FutureBuilder(
-          future: ApiService().getIncomeOrExpense(),
+          future: JsonService().getIncomeOrExpense(),
           builder: (BuildContext buildContext,
               AsyncSnapshot<List<Budget>> snapshot) {
             if (snapshot.hasData) {
@@ -236,7 +229,7 @@ class HomeScreenState extends State<HomeScreen>
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: FutureBuilder(
-                              future: ApiService().getBudgetHistoryByDate(
+                              future: JsonService().getBudgetHistoryByDate(
                                   (historyDay.toString())),
                               builder: (BuildContext buildContext,
                                   AsyncSnapshot<List<Budget>> snapshot) {
@@ -256,7 +249,7 @@ class HomeScreenState extends State<HomeScreen>
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: (() {
-                                            ApiService().popMenuAfter(
+                                            BudgetEditingMenu().showEditDialog(
                                                 context,
                                                 incomeOrExpense(budget),
                                                 budget);

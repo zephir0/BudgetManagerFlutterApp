@@ -1,17 +1,17 @@
 import 'dart:convert';
-
-import 'package:budget_manager_flutter/api/api_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:budget_manager_flutter/api/auth_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/registration-page/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:budget_manager_flutter/model/user.dart';
-import 'package:budget_manager_flutter/screens/home-page/home_screen.dart';
-import 'package:http/http.dart' as http;
-import '../../auth/session.dart';
+import '../../api/api_service.dart';
+import '../../auth/user_session.dart';
+import '../home-page/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  static final loginScreenKey = new GlobalKey<LoginScreenState>();
 
   @override
   State<LoginScreen> createState() => LoginScreenState();
@@ -22,13 +22,11 @@ class LoginScreenState extends State<LoginScreen> {
   bool failLoginMessageVisibility = false;
   final loginKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
-        // ignore: prefer_const_constructors
         decoration:
             BoxDecoration(gradient: GlobalVariables().backgroundGradient),
         child: ListView(children: [
@@ -37,7 +35,7 @@ class LoginScreenState extends State<LoginScreen> {
           failToLoginMessage(),
           userLoginForm(user, loginKey),
           userPasswordForm(user, passwordKey),
-          loginButton(context, user, loginKey, passwordKey),
+          loginButton(user, context, loginKey, passwordKey),
           ctaRegister(),
           registerButton(context),
         ]),
@@ -159,14 +157,16 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   Padding loginButton(
-      BuildContext context, User user, var loginKey, var passwordKey) {
+      User user, BuildContext context, var loginKey, var passwordKey) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(110, 20, 110, 10),
       child: ElevatedButton(
           onPressed: () {
             if (loginKey.currentState!.validate() &
                 passwordKey.currentState!.validate()) {
-              login(user, context);
+              AuthService()
+                  .login(user, context)
+                  .then((value) => setFailLoginMessageVisibility(value));
             }
           },
           style: ElevatedButton.styleFrom(
@@ -175,7 +175,6 @@ class LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(30)),
               backgroundColor: GlobalVariables().loginButtonColor,
               minimumSize: GlobalVariables().loginButtonSize),
-          // ignore: prefer_const_constructors
           child: Text(
             "SIGN IN",
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -235,25 +234,9 @@ class LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  Future login(User user, BuildContext buildContext) async {
-    String url = ApiService().backEndServerUrl + "/auth/api/login";
-    var response = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'login': user.login, 'password': user.password}));
-
-    if (response.statusCode == 200) {
-      Session().getCookie(response);
-      var session = Session();
-      session.cookies = Session().getCookie(response);
-      Navigator.push(buildContext,
-          MaterialPageRoute(builder: (buildContext) => HomeScreen()));
-      setState(() {
-        failLoginMessageVisibility = false;
-      });
-    } else {
-      setState(() {
-        failLoginMessageVisibility = true;
-      });
-    }
+  void setFailLoginMessageVisibility(bool value) {
+    setState(() {
+      failLoginMessageVisibility = value;
+    });
   }
 }

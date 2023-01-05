@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:budget_manager_flutter/api/api_service.dart';
+import 'package:budget_manager_flutter/api/auth_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/login-page/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +15,14 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  bool registerMessage = false;
-  bool formVisibility = true;
-  bool userPassVisibility = true;
-  bool registerButtonVisibility = true;
-  bool goToLoginPageVisibility = false;
-  bool failedRegisterMessageVisibility = false;
   final loginKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();
+  bool isFormVisible = true;
+  bool isUserPassVisible = true;
+  bool isRegisterButtonVisible = true;
+  bool isGoToLoginPageVisible = false;
+  bool isFailedMessageVisible = false;
+  bool isSuccessMessageVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,21 +34,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         child: ListView(children: [
           LoginScreenState().loginIcon(),
           Visibility(
-              visible: failedRegisterMessageVisibility,
-              child: failRegisterMessage()),
+              visible: isFailedMessageVisible,
+              child: displayRegisterMessage(false)),
           Visibility(
-            visible: registerMessage,
-            child: successRegisterMessage(),
+            visible: isSuccessMessageVisible,
+            child: displayRegisterMessage(true),
           ),
-          Visibility(visible: formVisibility, child: userLoginForm(user)),
+          Visibility(visible: isFormVisible, child: userLoginForm(user)),
           Visibility(
-              visible: userPassVisibility,
+              visible: isUserPassVisible,
               child: LoginScreenState().userPasswordForm(user, passwordKey)),
           Visibility(
-              visible: registerButtonVisibility,
+              visible: isRegisterButtonVisible,
               child: regiterButton(context, user)),
           Visibility(
-              visible: goToLoginPageVisibility,
+              visible: isGoToLoginPageVisible,
               child: gotoLoginPageButton(context, user))
         ]),
       ),
@@ -100,7 +101,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           onPressed: () {
             if (loginKey.currentState!.validate() &
                 passwordKey.currentState!.validate()) {
-              register(user, context);
+              AuthService()
+                  .register(user, context)
+                  .then((value) => registeredSuccess(value));
             }
           },
           style: ElevatedButton.styleFrom(
@@ -139,78 +142,58 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Padding successRegisterMessage() {
+  Padding displayRegisterMessage(bool success) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 30, 20, 40),
+      padding: success
+          ? const EdgeInsets.fromLTRB(20, 30, 20, 40)
+          : EdgeInsets.fromLTRB(50, 10, 50, 10),
       child: Center(
         child: Column(
           children: [
             Text(
-              "CONGRATULATIONS!",
+              success ? "CONGRATULATIONS!" : "REGISTRATION FAILED!",
               style: TextStyle(
-                  color: Color.fromARGB(255, 51, 223, 102),
+                  color:
+                      success ? Color.fromARGB(255, 51, 223, 102) : Colors.red,
                   fontWeight: FontWeight.bold,
-                  fontSize: 25),
+                  fontSize: success ? 25 : 20),
             ),
             Text(
-              "YOU HAVE!",
+              success ? "YOU HAVE!" : "LOGIN ALREADY EXIST",
               style: TextStyle(
-                  color: Color.fromARGB(255, 255, 255, 255),
+                  color:
+                      success ? Color.fromARGB(255, 255, 255, 255) : Colors.red,
                   fontWeight: FontWeight.bold,
-                  fontSize: 25),
+                  fontSize: success ? 25 : 18),
             ),
-            Text(
-              "SUCCESSFULLY REGISTERED!",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25),
-            ),
+            success
+                ? Text(
+                    "SUCCESSFULLY REGISTERED!",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25),
+                  )
+                : Container(),
           ],
         ),
       ),
     );
   }
 
-  Padding failRegisterMessage() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-      child: Center(
-          child: Column(
-        children: [
-          Text(
-            "REGISTRATION FAILED!",
-            style: TextStyle(
-                color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          Text(
-            "LOGIN ALREADY EXIST",
-            style: TextStyle(
-                color: Colors.red, fontWeight: FontWeight.bold, fontSize: 18),
-          ),
-        ],
-      )),
-    );
-  }
-
-  Future register(User user, BuildContext context) async {
-    String url = ApiService().backEndServerUrl + "/auth/api/register";
-    var response = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'login': user.login, 'password': user.password}));
-
-    if (response.statusCode == 200) {
+  void registeredSuccess(var value) {
+    if (value == false) {
       setState(() {
-        registerMessage = true;
-        formVisibility = false;
-        userPassVisibility = false;
-        registerButtonVisibility = false;
-        goToLoginPageVisibility = true;
-        failedRegisterMessageVisibility = false;
+        isSuccessMessageVisible = true;
+        isFormVisible = false;
+        isUserPassVisible = false;
+        isRegisterButtonVisible = false;
+        isGoToLoginPageVisible = true;
+        isFailedMessageVisible = false;
       });
     } else {
       setState(() {
-        failedRegisterMessageVisibility = true;
+        isFailedMessageVisible = true;
       });
     }
   }

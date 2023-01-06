@@ -1,6 +1,5 @@
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/setting-page/setting_menu.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatelessWidget {

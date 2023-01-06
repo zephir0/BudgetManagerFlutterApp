@@ -8,11 +8,11 @@ import '../model/budget.dart';
 import '../model/user.dart';
 
 class JsonService {
-  final String backEndServerUrl = "https://serene-reaches-23699.herokuapp.com";
-  // String backEndServerUrl = "http://192.168.0.14:8080";
+  // final String backEndServerUrl = "https://serene-reaches-23699.herokuapp.com";
+  String backEndServerUrl = "http://192.168.0.14:8080";
+  final UserSession session = UserSession();
 
   Future<User> getUser() async {
-    var session = UserSession();
     var url = Uri.parse(backEndServerUrl + "/api/user");
     var request = await http.get(
       url,
@@ -26,7 +26,6 @@ class JsonService {
   }
 
   Future<Budget> getBalance() async {
-    var session = UserSession();
     var url = Uri.parse(backEndServerUrl + "/api/budget/count/total");
     var request = await http.get(
       url,
@@ -40,7 +39,6 @@ class JsonService {
   }
 
   Future<List<Budget>> getBudgetHistoryByDate(String dayNumber) async {
-    var session = UserSession();
     var url = Uri.parse(backEndServerUrl + "/api/budget/findAll/${dayNumber}");
     var request = await http.get(
       url,
@@ -58,7 +56,6 @@ class JsonService {
   }
 
   Future<List<Budget>> getIncomeOrExpense() async {
-    var session = UserSession();
     var url = Uri.parse(backEndServerUrl + "/api/budget/findAll");
     var request = await http.get(
       url,
@@ -77,7 +74,6 @@ class JsonService {
 
   Future editBudget(String expenseOrIncome,
       TextEditingController textEditingController, Budget budget) async {
-    var session = UserSession();
     var url = Uri.parse(backEndServerUrl + "/api/budget/${budget.id}");
     var body = json.encode({expenseOrIncome: textEditingController.text});
 
@@ -91,7 +87,6 @@ class JsonService {
 
   void updateBudget(TextEditingController textEditingController,
       String expenseOrIncome) async {
-    var session = UserSession();
     var url = Uri.parse(backEndServerUrl + "/api/budget/");
     var body = json.encode({expenseOrIncome: textEditingController.text});
 

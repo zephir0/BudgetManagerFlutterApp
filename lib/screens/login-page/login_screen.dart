@@ -1,14 +1,9 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:budget_manager_flutter/api/auth_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:budget_manager_flutter/screens/registration-page/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:budget_manager_flutter/model/user.dart';
-import '../../api/api_service.dart';
-import '../../auth/user_session.dart';
-import '../home-page/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   static final loginScreenKey = new GlobalKey<LoginScreenState>();

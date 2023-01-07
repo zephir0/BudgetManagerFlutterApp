@@ -7,7 +7,7 @@ class ApiService {
   final String backEndServerUrl = "http://192.168.0.14:8080";
   final UserSession session = UserSession();
 
-  Future deleteBudget(int? id) async {
+  Future<bool> deleteBudget(int? id) async {
     var url = Uri.parse(backEndServerUrl + "/api/budget/${id}");
     await http.delete(
       url,
@@ -16,6 +16,7 @@ class ApiService {
         'Content-type': 'application/json'
       },
     );
+    return true;
   }
 
   Future logout() async {

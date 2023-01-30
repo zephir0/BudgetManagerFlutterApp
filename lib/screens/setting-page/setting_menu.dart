@@ -1,7 +1,7 @@
 import 'package:budget_manager_flutter/api/api_service.dart';
 import 'package:budget_manager_flutter/auth/user_session.dart';
+import 'package:budget_manager_flutter/screens/ticket-page/ticket_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class SettingMenu {
   Padding menu(BuildContext context) {
@@ -10,8 +10,13 @@ class SettingMenu {
       child: Column(children: [
         menuBuilder(context, Icons.restore, "Reset everything",
             () => deleteAllBudgets(context)),
-        menuBuilder(context, Icons.headphones_battery, "Help Center",
-            () => logoutFunction(context)),
+        menuBuilder(
+          context,
+          Icons.headphones_battery,
+          "Help Center",
+          () => Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => TicketScreen())),
+        ),
         menuBuilder(context, Icons.notifications, "Notifications",
             () => logoutFunction(context)),
         menuBuilder(

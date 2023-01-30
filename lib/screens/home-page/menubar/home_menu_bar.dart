@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../setting-page/setting_screen.dart';
+import '../../statistics-page/statistics_screen.dart';
 
 class HomeMenuBar {
   Padding menuBar(BuildContext context) {
@@ -12,8 +13,8 @@ class HomeMenuBar {
         children: [
           menuBarCreator(context, Icons.calendar_month, "HISTORY",
               route: SettingScreen()),
-          menuBarCreator(context, Icons.heart_broken, "XXXXX",
-              route: SettingScreen()),
+          menuBarCreator(context, Icons.auto_graph_outlined, "STATISTICS",
+              route: StatisticsScreen()),
           menuBarCreator(context, Icons.settings, "SETTINGS",
               route: SettingScreen()),
         ],
@@ -22,7 +23,7 @@ class HomeMenuBar {
   }
 
   Container menuBarCreator(BuildContext context, IconData icon, String menuName,
-      {required StatelessWidget route}) {
+      {required Widget route}) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(35),
@@ -57,7 +58,7 @@ class HomeMenuBar {
                   menuName.toUpperCase(),
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 15,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold),
                 ),
               )

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../api/json_service.dart';
+import '../../api/budget_json_service.dart';
 import '../../model/user.dart';
 
 class UserGreetingWidget {
@@ -8,7 +8,7 @@ class UserGreetingWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(40, 10, 40, 30),
         child: FutureBuilder(
-            future: JsonService().getUser(),
+            future: BudgetJsonService().getUser(),
             builder: (BuildContext buildContext, AsyncSnapshot<User> snapshot) {
               if (snapshot.hasData) {
                 User? user = snapshot.data;

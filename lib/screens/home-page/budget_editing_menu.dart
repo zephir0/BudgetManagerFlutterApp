@@ -1,10 +1,9 @@
-import 'package:budget_manager_flutter/api/json_service.dart';
+import 'package:budget_manager_flutter/api/budget_json_service.dart';
 import 'package:flutter/material.dart';
 import '../../model/budget.dart';
 
 class BudgetEditingMenu {
-  Future showEditDialog(
-      BuildContext context, String expenseOrIncome, Budget budget) async {
+  Future showEditDialog(BuildContext context, Budget budget) async {
     return await showDialog(
         context: context,
         builder: (context) {
@@ -12,23 +11,20 @@ class BudgetEditingMenu {
             backgroundColor: Color.fromARGB(255, 31, 30, 30),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-            child: buildEditForm(context, expenseOrIncome, budget),
+            child: buildEditForm(context, budget),
           );
         });
   }
 
-  Form buildEditForm(
-      BuildContext context, String expenseOrIncome, Budget budget) {
+  Form buildEditForm(BuildContext context, Budget budget) {
     GlobalKey<FormState> formkey = GlobalKey<FormState>();
     TextEditingController textEditingController = TextEditingController();
-
     return Form(
       key: formkey,
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         buildEditHeader(),
         buildEditTextField(textEditingController),
-        buildEditButton(
-            context, formkey, textEditingController, expenseOrIncome, budget),
+        buildEditButton(context, formkey, textEditingController, budget),
       ]),
     );
   }
@@ -70,7 +66,6 @@ class BudgetEditingMenu {
       BuildContext context,
       GlobalKey<FormState> formkey,
       TextEditingController textEditingController,
-      String expenseOrIncome,
       Budget budget) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -85,8 +80,7 @@ class BudgetEditingMenu {
       ),
       onPressed: (() async {
         if (formkey.currentState!.validate()) {
-          JsonService()
-              .editBudget(expenseOrIncome, textEditingController, budget);
+          BudgetJsonService().editBudget(textEditingController, budget);
           Navigator.pop(context);
         }
       }),

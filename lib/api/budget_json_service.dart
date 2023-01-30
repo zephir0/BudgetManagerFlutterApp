@@ -1,19 +1,20 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:budget_manager_flutter/auth/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import '../model/budget.dart';
+import '../model/budget_type.dart';
 import '../model/user.dart';
+import 'api_service.dart';
 
-class JsonService {
-  // final String backEndServerUrl = "https://serene-reaches-23699.herokuapp.com";
-  String backEndServerUrl = "http://192.168.0.14:8080";
+class BudgetJsonService {
   final UserSession session = UserSession();
 
   Future<User> getUser() async {
-    var url = Uri.parse(backEndServerUrl + "/api/user");
+    var url = Uri.parse(ApiService().backEndServerUrl + "/api/user");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -26,7 +27,8 @@ class JsonService {
   }
 
   Future<Budget> getBalance() async {
-    var url = Uri.parse(backEndServerUrl + "/api/budget/count/total");
+    var url =
+        Uri.parse(ApiService().backEndServerUrl + "/api/budget/count/total");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -39,7 +41,8 @@ class JsonService {
   }
 
   Future<List<Budget>> getBudgetHistoryByDate(String dayNumber) async {
-    var url = Uri.parse(backEndServerUrl + "/api/budget/findAll/${dayNumber}");
+    var url = Uri.parse(
+        ApiService().backEndServerUrl + "/api/budget/findAll/${dayNumber}");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -55,8 +58,8 @@ class JsonService {
     }
   }
 
-  Future<List<Budget>> getIncomeOrExpense() async {
-    var url = Uri.parse(backEndServerUrl + "/api/budget/findAll");
+  Future<List<Budget>> getAllBudget() async {
+    var url = Uri.parse(ApiService().backEndServerUrl + "/api/budget/findAll");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -72,29 +75,49 @@ class JsonService {
     }
   }
 
-  Future editBudget(String expenseOrIncome,
+  Future editBudget(
       TextEditingController textEditingController, Budget budget) async {
-    var url = Uri.parse(backEndServerUrl + "/api/budget/${budget.id}");
-    var body = json.encode({expenseOrIncome: textEditingController.text});
+    var url =
+        Uri.parse(ApiService().backEndServerUrl + "/api/budget/${budget.id}");
+
+    Map<String, dynamic> jsonData;
+
+    if (int.parse(textEditingController.text) < 0) {
+      jsonData = {
+        "value": int.parse(textEditingController.text),
+        "budgetType": BudgetType.EXPENSE.toString().split('.').last
+      };
+    } else {
+      jsonData = {
+        "value": int.parse(textEditingController.text),
+        "budgetType": BudgetType.INCOME.toString().split('.').last
+      };
+    }
 
     await http.put(url,
         headers: {
           'Cookie': 'JSESSIONID=${session.cookies}',
           'Content-type': 'application/json'
         },
-        body: body);
+        body: json.encode(jsonData));
   }
 
-  void updateBudget(TextEditingController textEditingController,
-      String expenseOrIncome) async {
-    var url = Uri.parse(backEndServerUrl + "/api/budget/");
-    var body = json.encode({expenseOrIncome: textEditingController.text});
+  void addBudget(TextEditingController textEditingController,
+      TextEditingController selectedCategory, BudgetType budgetType) async {
+    var url = Uri.parse(ApiService().backEndServerUrl + "/api/budget/");
+    String categoryType =
+        budgetType == BudgetType.INCOME ? "incomeCategory" : "expenseCategory";
 
+    Map<String, dynamic> jsonData = {
+      "value": int.parse(textEditingController.text),
+      "budgetType": budgetType.toString().split('.').last,
+      categoryType: selectedCategory.text,
+    };
     await http.post(url,
         headers: {
           'Cookie': 'JSESSIONID=${session.cookies}',
           'Content-type': 'application/json'
         },
-        body: body);
+        body: json.encode(jsonData));
   }
 }

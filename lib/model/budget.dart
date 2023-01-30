@@ -1,31 +1,46 @@
+import '../utils/budget_service.dart';
+import 'budget_type.dart';
+import 'expense_category.dart';
+import 'income_category.dart';
+
 class Budget {
   late int? id;
   late int? balance;
-  late int? income;
-  late int? expense;
+  late int? value;
+  late BudgetType? budgetType;
+  late IncomeCategory? incomeCategory;
+  late ExpenseCategory? expenseCategory;
   late String? historyDayNumber;
-  Budget(
-      {this.id,
-      this.balance,
-      this.income,
-      this.expense,
-      this.historyDayNumber});
+
+  Budget({
+    this.id,
+    this.balance,
+    this.value,
+    this.budgetType,
+    this.incomeCategory,
+    this.expenseCategory,
+    this.historyDayNumber,
+  });
 
   factory Budget.fromJsonBalance(int balance) {
-    return Budget(balance: balance);
+    return Budget(
+      balance: balance,
+    );
   }
 
   factory Budget.fromJson(Map<String, dynamic> json) {
     return Budget(
         id: json['id'],
-        income: json['income'],
-        expense: json['expense'],
+        value: json['value'],
+        budgetType: json['budgetType'] == 'INCOME'
+            ? BudgetType.INCOME
+            : BudgetType.EXPENSE,
+        incomeCategory: json['incomeCategory'] != null
+            ? BudgetService().stringToIncomeCategory(json['incomeCategory'])
+            : null,
+        expenseCategory: json['expenseCategory'] != null
+            ? BudgetService().stringToExpenseCategory(json['expenseCategory'])
+            : null,
         historyDayNumber: json['historyDayNumber']);
-  }
-
-  Map<String, dynamic> incomeToJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['income'] = this.income;
-    return data;
   }
 }

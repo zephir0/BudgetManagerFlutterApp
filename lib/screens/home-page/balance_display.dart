@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../api/json_service.dart';
+import '../../api/budget_json_service.dart';
 import '../../model/budget.dart';
 
 class BalanceDisplay {
@@ -8,7 +8,7 @@ class BalanceDisplay {
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
       child: FutureBuilder(
-          future: JsonService().getBalance(),
+          future: BudgetJsonService().getBalance(),
           builder: (BuildContext buildContext, AsyncSnapshot<Budget> snapshot) {
             if (snapshot.hasData) {
               Budget? budget = snapshot.data;

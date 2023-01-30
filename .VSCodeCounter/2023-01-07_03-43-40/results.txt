@@ -1,0 +1,57 @@
+Date : 2023-01-07 03:43:40
+Directory : c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib
+Total : 21 files,  1470 codes, 40 comments, 130 blanks, all 1640 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         21 |      1,470 |         40 |        130 |      1,640 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                         |         21 |      1,470 |         40 |        130 |      1,640 |
+| . (Files)                                                                                                 |          1 |         21 |          0 |          3 |         24 |
+| api                                                                                                       |          3 |        160 |          2 |         25 |        187 |
+| auth                                                                                                      |          1 |         20 |          0 |          7 |         27 |
+| model                                                                                                     |          2 |         37 |          0 |          8 |         45 |
+| screens                                                                                                   |         14 |      1,232 |         38 |         87 |      1,357 |
+| screens (Files)                                                                                           |          1 |         17 |          4 |          6 |         27 |
+| screens\home-page                                                                                         |          9 |        673 |         30 |         49 |        752 |
+| screens\home-page (Files)                                                                                 |          8 |        606 |         30 |         45 |        681 |
+| screens\home-page\menubar                                                                                 |          1 |         67 |          0 |          4 |         71 |
+| screens\login-page                                                                                        |          1 |        223 |          2 |         13 |        238 |
+| screens\registration-page                                                                                 |          1 |        191 |          0 |         10 |        201 |
+| screens\setting-page                                                                                      |          2 |        128 |          2 |          9 |        139 |
++-----------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                  | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\api\api_service.dart                               | Dart     |         39 |          1 |          6 |         46 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\api\auth_service.dart                              | Dart     |         35 |          0 |          5 |         40 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\api\json_service.dart                              | Dart     |         86 |          1 |         14 |        101 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\auth\user_session.dart                             | Dart     |         20 |          0 |          7 |         27 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\main.dart                                          | Dart     |         21 |          0 |          3 |         24 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\model\budget.dart                                  | Dart     |         28 |          0 |          4 |         32 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\model\user.dart                                    | Dart     |          9 |          0 |          4 |         13 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\global_variables.dart                      | Dart     |         17 |          4 |          6 |         27 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\balance_display.dart             | Dart     |         57 |          0 |          3 |         60 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\budget_adding.dart               | Dart     |         38 |          0 |          2 |         40 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\budget_adding_menu.dart          | Dart     |         87 |          0 |          7 |         94 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\budget_editing_menu.dart         | Dart     |         90 |          0 |          7 |         97 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\budget_items_display.dart        | Dart     |        174 |         29 |          6 |        209 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\home_screen.dart                 | Dart     |         60 |          0 |          7 |         67 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\menubar\home_menu_bar.dart       | Dart     |         67 |          0 |          4 |         71 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\slide_widget.dart                | Dart     |         57 |          1 |         10 |         68 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\home-page\user_greeting_widget.dart        | Dart     |         43 |          0 |          3 |         46 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\login-page\login_screen.dart               | Dart     |        223 |          2 |         13 |        238 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\registration-page\registration_screen.dart | Dart     |        191 |          0 |         10 |        201 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\setting-page\setting_menu.dart             | Dart     |         51 |          0 |          5 |         56 |
+| c:\Users\kryst\IdeaProjects\budget_manager_flutter\lib\screens\setting-page\setting_screen.dart           | Dart     |         77 |          2 |          4 |         83 |
+| Total                                                                                                     |          |      1,470 |         40 |        130 |      1,640 |
++-----------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:budget_manager_flutter/auth/user_session.dart';
+import 'package:budget_manager_flutter/model/expense_category.dart';
+import 'package:budget_manager_flutter/model/income_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,6 +45,25 @@ class BudgetJsonService {
   Future<List<Budget>> getBudgetHistoryByDate(String dayNumber) async {
     var url = Uri.parse(
         ApiService().backEndServerUrl + "/api/budget/findAll/${dayNumber}");
+    var request = await http.get(
+      url,
+      headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
+    );
+
+    if (request.statusCode == 200) {
+      List<Budget> budgetList = (json.decode(request.body) as List)
+          .map((data) => Budget.fromJson(data))
+          .toList();
+      return budgetList;
+    } else {
+      throw Exception("Failed to get a balance.");
+    }
+  }
+
+  Future<List<Budget>> getBudgetByCategoryName(
+      String budgetType, String categoryName) async {
+    var url = Uri.parse(ApiService().backEndServerUrl +
+        "/api/budget/${budgetType}/findAll/${categoryName}");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -109,9 +130,12 @@ class BudgetJsonService {
         budgetType == BudgetType.INCOME ? "incomeCategory" : "expenseCategory";
 
     Map<String, dynamic> jsonData = {
-      "value": int.parse(textEditingController.text),
+      "value": budgetType == BudgetType.INCOME
+          ? int.parse(textEditingController.text)
+          : -int.parse(textEditingController.text),
       "budgetType": budgetType.toString().split('.').last,
-      categoryType: selectedCategory.text,
+      categoryType:
+          selectedCategory.text.isEmpty ? "OTHERS" : selectedCategory.text,
     };
     await http.post(url,
         headers: {

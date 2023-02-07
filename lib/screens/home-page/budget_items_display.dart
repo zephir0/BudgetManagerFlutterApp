@@ -132,7 +132,7 @@ class BudgetItemsDisplayer {
                                                             BudgetType.INCOME) {
                                                           return "+${budget.value}";
                                                         }
-                                                        return "-${budget.value}";
+                                                        return "${budget.value}";
                                                       })(),
                                                       style: TextStyle(
                                                           fontSize: 22,
@@ -168,5 +168,10 @@ class BudgetItemsDisplayer {
       return 5;
     } else
       return budgetList.length;
+  }
+
+  int negativeValue(int value) {
+    int negative = -value;
+    return negative;
   }
 }

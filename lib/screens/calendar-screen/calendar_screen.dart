@@ -159,7 +159,11 @@ class CalendarScreenState extends State<CalendarScreen> {
                                                                       10,
                                                                       0),
                                                               child: Text(
-                                                                "${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}",
+                                                                budget.budgetType ==
+                                                                        BudgetType
+                                                                            .INCOME
+                                                                    ? "+${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}"
+                                                                    : "${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}",
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,

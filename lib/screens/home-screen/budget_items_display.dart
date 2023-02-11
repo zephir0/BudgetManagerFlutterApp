@@ -131,7 +131,7 @@ class BudgetItemsDisplayer {
                                                       (() {
                                                         if (budget.budgetType ==
                                                             BudgetType.INCOME) {
-                                                          return "${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}";
+                                                          return "+${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}";
                                                         }
                                                         return "${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}";
                                                       })(),

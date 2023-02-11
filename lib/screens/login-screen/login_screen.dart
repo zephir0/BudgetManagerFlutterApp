@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class LoginScreenState extends State<LoginScreen> {
-  User user = User("", "");
+  User user = User("", "", "");
   bool failLoginMessageVisibility = false;
   final loginKey = GlobalKey<FormState>();
   final passwordKey = GlobalKey<FormState>();

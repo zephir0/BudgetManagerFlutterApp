@@ -1,6 +1,6 @@
 import 'package:budget_manager_flutter/api/auth_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
-import 'package:budget_manager_flutter/screens/registration-page/registration_screen.dart';
+import 'package:budget_manager_flutter/screens/registration-screen/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:budget_manager_flutter/model/user.dart';

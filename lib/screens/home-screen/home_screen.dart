@@ -2,11 +2,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:budget_manager_flutter/screens/global_variables.dart';
-import 'package:budget_manager_flutter/screens/home-page/balance_display.dart';
-import 'package:budget_manager_flutter/screens/home-page/budget_adding.dart';
-import 'package:budget_manager_flutter/screens/home-page/budget_items_display.dart';
-import 'package:budget_manager_flutter/screens/home-page/menubar/home_menu_bar.dart';
-import 'package:budget_manager_flutter/screens/home-page/user_greeting_widget.dart';
+import 'package:budget_manager_flutter/screens/home-screen/balance_display.dart';
+import 'package:budget_manager_flutter/screens/home-screen/budget_adding.dart';
+import 'package:budget_manager_flutter/screens/home-screen/budget_items_display.dart';
+import 'package:budget_manager_flutter/screens/home-screen/menubar/home_menu_bar.dart';
+import 'package:budget_manager_flutter/screens/home-screen/user_greeting_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

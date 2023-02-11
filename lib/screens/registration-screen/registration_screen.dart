@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:budget_manager_flutter/api/api_service.dart';
 import 'package:budget_manager_flutter/api/auth_service.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
-import 'package:budget_manager_flutter/screens/login-page/login_screen.dart';
+import 'package:budget_manager_flutter/screens/login-screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../model/user.dart';

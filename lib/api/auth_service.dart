@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../auth/user_session.dart';
 import '../model/user.dart';
-import '../screens/home-page/home_screen.dart';
+import '../screens/home-screen/home_screen.dart';
 import 'api_service.dart';
 
 class AuthService {

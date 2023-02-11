@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../api/budget_json_service.dart';
 import '../../model/budget.dart';
+import '../../utils/formatting_numbers.dart';
 
 class BalanceDisplay {
   Padding showBalanceScreen(BuildContext context) {
@@ -31,7 +32,8 @@ class BalanceDisplay {
                           child: Padding(
                         padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                         child: Text(
-                          "£" "${budget?.balance}",
+                          "£"
+                          "${NumberFormatter().getFormattedNumber(budget!.balance!.toDouble())}",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 43,

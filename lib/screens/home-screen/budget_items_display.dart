@@ -1,10 +1,11 @@
 import 'package:budget_manager_flutter/model/budget_type.dart';
-import 'package:budget_manager_flutter/screens/home-page/slide_widget.dart';
+import 'package:budget_manager_flutter/screens/home-screen/slide_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/api_service.dart';
 import '../../api/budget_json_service.dart';
 import '../../model/budget.dart';
+import '../../utils/formatting_numbers.dart';
 import 'budget_editing_menu.dart';
 import 'home_screen.dart';
 
@@ -130,9 +131,9 @@ class BudgetItemsDisplayer {
                                                       (() {
                                                         if (budget.budgetType ==
                                                             BudgetType.INCOME) {
-                                                          return "+${budget.value}";
+                                                          return "${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}";
                                                         }
-                                                        return "${budget.value}";
+                                                        return "${NumberFormatter().getFormattedNumber(budget.value!.toDouble())}";
                                                       })(),
                                                       style: TextStyle(
                                                           fontSize: 22,

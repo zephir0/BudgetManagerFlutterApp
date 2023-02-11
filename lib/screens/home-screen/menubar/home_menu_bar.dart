@@ -1,8 +1,9 @@
+import 'package:budget_manager_flutter/screens/calendar-screen/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../setting-page/setting_screen.dart';
-import '../../statistics-page/category_screen.dart';
+import '../../setting-screen/setting_screen.dart';
+import '../../statistics-screen/category_screen.dart';
 
 class HomeMenuBar {
   Padding menuBar(BuildContext context) {
@@ -11,8 +12,8 @@ class HomeMenuBar {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          menuBarCreator(context, Icons.calendar_month, "HISTORY",
-              route: SettingScreen()),
+          menuBarCreator(context, Icons.calendar_month, "CALENDAR",
+              route: CalendarScreen()),
           menuBarCreator(context, Icons.auto_graph_outlined, "STATISTICS",
               route: CategoryScreen()),
           menuBarCreator(context, Icons.settings, "SETTINGS",

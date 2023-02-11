@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:budget_manager_flutter/model/income_category.dart';
-import 'package:budget_manager_flutter/screens/home-page/home_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budget_manager_flutter/model/budget_type.dart';

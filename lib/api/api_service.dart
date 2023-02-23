@@ -33,7 +33,7 @@ class ApiService {
 
   Future deleteAllBudgets() async {
     try {
-      var url = Uri.parse(backEndServerUrl + "/api/budget");
+      var url = Uri.parse(backEndServerUrl + "/api/budget/deleteAll");
       await http.delete(url, headers: {
         'Cookie': 'JSESSIONID=${session.cookies}',
         'Content-type': 'application/json'

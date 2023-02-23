@@ -1,9 +1,9 @@
-import 'package:budget_manager_flutter/screens/calendar-screen/calendar_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/calendar-screen/calendar_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../setting-screen/setting_screen.dart';
-import '../../statistics-screen/category_screen.dart';
+import 'setting-screen/setting_screen.dart';
+import 'category-screen/category_screen.dart';
 
 class HomeMenuBar {
   Padding menuBar(BuildContext context) {

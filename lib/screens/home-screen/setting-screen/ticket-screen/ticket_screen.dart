@@ -1,9 +1,9 @@
-import 'package:budget_manager_flutter/screens/ticket-page/ticket_creation_screen.dart';
-import 'package:budget_manager_flutter/screens/ticket-page/tickets_displayer.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/ticket-screen/ticket_creation_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/ticket-screen/tickets_displayer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../global_variables.dart';
+import '../../../global_variables.dart';
 
 class TicketScreen extends StatefulWidget {
   final GlobalKey<TicketScreenState> _key = GlobalKey<TicketScreenState>();

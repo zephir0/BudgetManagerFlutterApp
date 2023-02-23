@@ -1,13 +1,10 @@
-import 'dart:math';
-
 import 'package:budget_manager_flutter/model/budget_type.dart';
 import 'package:budget_manager_flutter/model/expense_category.dart';
 import 'package:budget_manager_flutter/model/income_category.dart';
-import 'package:budget_manager_flutter/screens/statistics-screen/income_transactions_screen.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:budget_manager_flutter/screens/home-screen/category-screen/income_transactions_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../global_variables.dart';
+import '../../global_variables.dart';
 import 'expense_transactons_screen.dart';
 
 class CategoryScreen extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:budget_manager_flutter/api/ticket_json_service.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/ticket.dart';
-import '../chat-screen/chat_screen.dart';
+import '../../../../model/ticket.dart';
+import 'chat-screen/chat_screen.dart';
 
 class TicketsDisplayer {
   SizedBox showAllTickets(BuildContext context) {

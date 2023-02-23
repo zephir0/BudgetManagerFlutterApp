@@ -1,12 +1,12 @@
 import 'package:budget_manager_flutter/model/budget_type.dart';
-import 'package:budget_manager_flutter/screens/home-screen/slide_widget.dart';
+import 'package:budget_manager_flutter/screens/home-screen/budget_dialog.dart';
+import 'package:budget_manager_flutter/screens/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../api/api_service.dart';
 import '../../api/budget_json_service.dart';
 import '../../model/budget.dart';
 import '../../utils/formatting_numbers.dart';
-import 'budget_editing_menu.dart';
 import 'home_screen.dart';
 
 class BudgetItemsDisplayer {
@@ -73,8 +73,13 @@ class BudgetItemsDisplayer {
                                         padding: const EdgeInsets.all(8.0),
                                         child: InkWell(
                                           onTap: (() {
-                                            BudgetEditingMenu().showEditDialog(
-                                                context, budget);
+                                            // BudgetEditDialog().showEditDialog(
+                                            //     context, budget);
+
+                                            BudgetDialog().showDialogMenu(
+                                                context,
+                                                budget,
+                                                budget.budgetType!);
                                           }),
                                           child: SlideBudget(
                                             callback: () {

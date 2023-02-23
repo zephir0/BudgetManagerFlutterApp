@@ -1,8 +1,8 @@
 // ignore_for_file: invalid_use_of_protected_member
 
 import 'package:budget_manager_flutter/api/ticket_json_service.dart';
+import 'package:budget_manager_flutter/utils/success_message.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class TicketCreatingForm {
   Form createTicket(
@@ -45,8 +45,9 @@ class TicketCreatingForm {
               if (formKey.currentState!.validate()) {
                 TicketJsonService().createTicket(
                     subjectController.text, messageController.text);
-                showSuccessMessage();
-                Future.delayed(Duration(seconds: 3), () {
+                SuccessMessageAfterSubmit()
+                    .successMessage("Form submitted successfully!");
+                Future.delayed(Duration(seconds: 4), () {
                   Navigator.pushNamed(buildContext, '/ticketScreen');
                 });
               }
@@ -56,16 +57,5 @@ class TicketCreatingForm {
         ],
       ),
     );
-  }
-
-  showSuccessMessage() {
-    Fluttertoast.showToast(
-        msg: "Form submitted successfully!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 3,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0);
   }
 }

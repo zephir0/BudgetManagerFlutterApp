@@ -15,19 +15,6 @@ import 'api_service.dart';
 class BudgetJsonService {
   final UserSession session = UserSession();
 
-  Future<User> getUser() async {
-    var url = Uri.parse(ApiService().backEndServerUrl + "/api/user");
-    var request = await http.get(
-      url,
-      headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
-    );
-    if (request.statusCode == 200) {
-      return User.fromJson(jsonDecode(request.body));
-    } else {
-      throw Exception("Failed to show user details");
-    }
-  }
-
   Future<Budget> getBalance() async {
     var url =
         Uri.parse(ApiService().backEndServerUrl + "/api/budget/count/total");
@@ -63,7 +50,7 @@ class BudgetJsonService {
   Future<List<Budget>> getBudgetByCategoryName(
       String budgetType, String categoryName) async {
     var url = Uri.parse(ApiService().backEndServerUrl +
-        "/api/budget/${budgetType}/findAll/${categoryName}");
+        "/api/budget/${budgetType.toLowerCase()}/findAll/${categoryName}");
     var request = await http.get(
       url,
       headers: {'Cookie': 'JSESSIONID=${session.cookies}'},
@@ -103,9 +90,9 @@ class BudgetJsonService {
 
     Map<String, dynamic> jsonData;
 
-    if (int.parse(textEditingController.text) < 0) {
+    if (budget.budgetType == BudgetType.EXPENSE) {
       jsonData = {
-        "value": int.parse(textEditingController.text),
+        "value": -1 * int.parse(textEditingController.text),
         "budgetType": BudgetType.EXPENSE.toString().split('.').last
       };
     } else {

@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:budget_manager_flutter/screens/calendar-screen/calendar_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/calendar-screen/calendar_screen.dart';
 import 'package:budget_manager_flutter/screens/home-screen/home_screen.dart';
 import 'package:budget_manager_flutter/screens/login-screen/login_screen.dart';
-import 'package:budget_manager_flutter/screens/setting-screen/setting_screen.dart';
-import 'package:budget_manager_flutter/screens/ticket-page/ticket_creation_screen.dart';
-import 'package:budget_manager_flutter/screens/ticket-page/ticket_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/setting_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/ticket-screen/ticket_creation_screen.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/ticket-screen/ticket_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

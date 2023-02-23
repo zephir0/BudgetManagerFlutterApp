@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:budget_manager_flutter/api/budget_json_service.dart';
+import 'package:budget_manager_flutter/api/user_json_service.dart';
 import 'package:budget_manager_flutter/auth/user_session.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:budget_manager_flutter/model/chat_message.dart';
 import 'package:http/http.dart' as http;
 
-import '../../api/api_service.dart';
-import '../../model/ticket.dart';
+import '../../../../../api/api_service.dart';
+import '../../../../../model/ticket.dart';
 
 class ChatScreen extends StatefulWidget {
   final Ticket ticket;
@@ -25,54 +27,108 @@ class _ChatScreenState extends State<ChatScreen> {
   UserSession session = UserSession();
   final TextEditingController _textController = TextEditingController();
   List<ChatMessage> _messages = [];
+  late bool isAdmin = false;
 
   @override
   void initState() {
     super.initState();
     getMessages(widget.ticket.id);
+    checkIfUserIsAdmin();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-          decoration:
-              BoxDecoration(gradient: GlobalVariables().backgroundGradient),
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _messages.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          child: Container(
-                            constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * 0.7),
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10.0)),
-                            child: Text(
-                              _messages[index].message,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 16.0,
-                              ),
-                            ),
-                          ),
-                        ));
-                  },
-                ),
-              ),
-            ],
+      decoration: BoxDecoration(gradient: GlobalVariables().backgroundGradient),
+      child: Column(
+        children: [ChatMessageDisplayer(), createMessage(_textController)],
+      ),
+    ));
+  }
+
+  Container ChatMessageDisplayer() {
+    return Container(
+      child: Expanded(
+        child: ListView.builder(
+          itemCount: _messages.length,
+          itemBuilder: (context, index) {
+            return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: Row(
+                      mainAxisAlignment: _messages[index].admin
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.end,
+                      children: _messages[index].admin
+                          ? [
+                              showIconAndUsername(index),
+                              showMessage(index),
+                            ]
+                          : [
+                              showMessage(index),
+                              showIconAndUsername(index),
+                            ]),
+                ));
+          },
+        ),
+      ),
+    );
+  }
+
+  Padding showIconAndUsername(index) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.person_rounded, size: 30),
+          Text(
+            _messages[index].admin ? "Admin" : "User",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Padding showMessage(index) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        alignment:
+            _messages[index].admin ? Alignment.topRight : Alignment.topLeft,
+        constraints: BoxConstraints(),
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: _messages[index].admin
+                ? Color.fromARGB(255, 188, 204, 224)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(10.0)),
+        child: Text(
+          _messages[index].message,
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 16.0,
           ),
         ),
-        floatingActionButton: createMessage(_textController),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked);
+      ),
+    );
   }
+
+  avatarAndUserName(ChatMessage message) => Padding(
+        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.person_rounded, size: 30),
+            Text(
+              message.admin ? "Admin" : "User",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
 
   Future<List<ChatMessage>> getMessages(int ticketId) async {
     var url =
@@ -86,7 +142,6 @@ class _ChatScreenState extends State<ChatScreen> {
       List<ChatMessage> chatMessages = (json.decode(response.body) as List)
           .map((data) => ChatMessage.fromJson(data))
           .toList();
-
       setState(() {
         this._messages = chatMessages;
       });
@@ -110,7 +165,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
       if (response.statusCode == 200) {
         setState(() {
-          _messages.add(ChatMessage(message: message));
+          _messages.add(ChatMessage(message: message, admin: isAdmin));
           _textController.clear();
         });
       } else {
@@ -121,16 +176,32 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  SizedBox createMessage(TextEditingController editingController) {
-    return SizedBox(
+  Future<void> checkIfUserIsAdmin() async {
+    return UserJsonService().getUser().then((user) {
+      if (user.role == "ADMIN") {
+        setState(() {
+          isAdmin = true;
+        });
+      } else {
+        setState(() {
+          isAdmin = false;
+        });
+      }
+    });
+  }
+
+  Container createMessage(TextEditingController editingController) {
+    return Container(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(
           children: <Widget>[
             Expanded(
               child: Form(
                 key: formKey,
                 child: TextFormField(
+                  minLines: 1,
+                  maxLines: null,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter a messager';

@@ -1,4 +1,4 @@
-import 'package:budget_manager_flutter/screens/ticket-page/ticket_creating_form.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/ticket-screen/ticket_creating_form.dart';
 import 'package:flutter/material.dart';
 
 class TicketCreationScreen extends StatefulWidget {

@@ -9,12 +9,12 @@ class ChatMessage {
   late int? id;
   late String message;
   late String? createdAt;
-  late bool? admin;
+  late bool admin;
   ChatMessage({
     this.id,
     required this.message,
     this.createdAt,
-    this.admin,
+    required this.admin,
   });
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) {

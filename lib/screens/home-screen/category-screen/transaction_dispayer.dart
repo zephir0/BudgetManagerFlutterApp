@@ -1,8 +1,8 @@
 import 'package:budget_manager_flutter/model/budget_type.dart';
 import 'package:flutter/material.dart';
 
-import '../../model/budget.dart';
-import '../../utils/formatting_numbers.dart';
+import '../../../model/budget.dart';
+import '../../../utils/formatting_numbers.dart';
 
 class TransactionDisplayer {
   ListView displayTransactions(String title, List<Budget> budget,
@@ -104,23 +104,28 @@ class TransactionDisplayer {
             backgroundColor: Color.fromARGB(255, 31, 30, 30),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-            child: Container(
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Text(
-                  budgetType.name == "EXPENSE"
-                      ? "Expense value : -${budget.value}"
-                      : "Income value : +${budget.value}",
-                  style: textStyleForShowDetailsDialog(),
-                ),
-                Text(
-                  "Category : ${budget.expenseCategory.toString().split('.').last}",
-                  style: textStyleForShowDetailsDialog(),
-                ),
-                Text(
-                  "Budget added day : ${budget.historyDayNumber}",
-                  style: textStyleForShowDetailsDialog(),
-                ),
-              ]),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Container(
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Text(
+                    budgetType.name == "EXPENSE"
+                        ? "Expense value : ${budget.value}"
+                        : "Income value : +${budget.value}",
+                    style: textStyleForShowDetailsDialog(),
+                  ),
+                  Text(
+                    budgetType.name == "EXPENSE"
+                        ? "Category : ${budget.expenseCategory.toString().split('.').last}"
+                        : "Category : ${budget.incomeCategory.toString().split('.').last}",
+                    style: textStyleForShowDetailsDialog(),
+                  ),
+                  Text(
+                    "Budget added day : ${budget.historyDayNumber}",
+                    style: textStyleForShowDetailsDialog(),
+                  ),
+                ]),
+              ),
             ),
           );
         });

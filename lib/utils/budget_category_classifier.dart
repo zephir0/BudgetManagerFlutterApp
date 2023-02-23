@@ -1,7 +1,7 @@
 import '../model/expense_category.dart';
 import '../model/income_category.dart';
 
-class BudgetService {
+class BudgetCategoryUtils {
   IncomeCategory stringToIncomeCategory(String category) {
     switch (category) {
       case 'SALARY':

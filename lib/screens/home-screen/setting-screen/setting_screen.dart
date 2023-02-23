@@ -1,6 +1,8 @@
 import 'package:budget_manager_flutter/screens/global_variables.dart';
-import 'package:budget_manager_flutter/screens/setting-screen/setting_menu.dart';
+import 'package:budget_manager_flutter/screens/home-screen/setting-screen/setting_menu_items.dart';
 import 'package:flutter/material.dart';
+
+import 'edit_profile_screen/edit_profile_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   @override
@@ -12,12 +14,11 @@ class SettingScreen extends StatelessWidget {
           child: Column(children: [
             userAvatar(context),
             editProfileButton(context),
-            SettingMenu().menu(context)
+            SettingMenuItems().mainMenu(context)
           ])),
     );
   }
 
-//DO ZAAPLIKOWANIA WRZUCANIE SWOJEGO AVATARA I MOZLIWOSC EDYCJI
   Center userAvatar(BuildContext context) {
     return Center(
       child: Column(
@@ -33,7 +34,6 @@ class SettingScreen extends StatelessWidget {
                 backgroundImage: NetworkImage(
                     "https://steamuserimages-a.akamaihd.net/ugc/795370174521845565/8F2A715B24E6CDDBC4F9DE5AF12D5D25843FD477/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true"),
                 radius: 60,
-                // backgroundColor: Color.fromARGB(255, 11, 70, 94),
               ),
             ),
           ),
@@ -70,7 +70,8 @@ class SettingScreen extends StatelessWidget {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             backgroundColor: Color.fromARGB(255, 15, 150, 173)),
-        onPressed: () => print("EDITPROFILE"),
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => EditProfileScreen())),
         child: Text(
           "Edit Profile",
           style: TextStyle(

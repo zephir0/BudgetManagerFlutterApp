@@ -1,4 +1,4 @@
-import '../utils/budget_service.dart';
+import '../utils/budget_category_classifier.dart';
 import 'budget_type.dart';
 import 'expense_category.dart';
 import 'income_category.dart';
@@ -36,10 +36,12 @@ class Budget {
             ? BudgetType.INCOME
             : BudgetType.EXPENSE,
         incomeCategory: json['incomeCategory'] != null
-            ? BudgetService().stringToIncomeCategory(json['incomeCategory'])
+            ? BudgetCategoryUtils()
+                .stringToIncomeCategory(json['incomeCategory'])
             : null,
         expenseCategory: json['expenseCategory'] != null
-            ? BudgetService().stringToExpenseCategory(json['expenseCategory'])
+            ? BudgetCategoryUtils()
+                .stringToExpenseCategory(json['expenseCategory'])
             : null,
         historyDayNumber: json['historyDayNumber']);
   }

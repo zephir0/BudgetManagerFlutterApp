@@ -1,14 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:budget_manager_flutter/model/expense_category.dart';
 import 'package:budget_manager_flutter/screens/global_variables.dart';
-import 'package:budget_manager_flutter/screens/statistics-screen/transaction_dispayer.dart';
+import 'package:budget_manager_flutter/screens/home-screen/category-screen/transaction_dispayer.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budget_manager_flutter/model/income_category.dart';
-
-import '../../api/budget_json_service.dart';
-import '../../model/budget.dart';
-import '../../model/budget_type.dart';
+import '../../../api/budget_json_service.dart';
+import '../../../model/budget.dart';
+import '../../../model/budget_type.dart';
 
 class ExpenseTransactionsScreen extends StatefulWidget {
   final ExpenseCategory expenseCategory;
